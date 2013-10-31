@@ -22,7 +22,7 @@
 # Import the PyQt and QGIS libraries
 from PyQt4.QtCore import QFileInfo, QCoreApplication, QTranslator, qVersion, QSettings, QObject, SIGNAL
 from PyQt4.QtGui import QMessageBox, QIcon, QAction
-from qgis.core import QgsGeometry, QgsApplication
+from qgis.core import QgsGeometry, QgsApplication, QgsVectorLayer
 # Initialize Qt resources from file resources.py
 import resources
 import sip
@@ -89,7 +89,7 @@ class GeometryCopier:
 
     def copy_geometry(self):
         layer = self.iface.activeLayer()
-        if not layer:
+        if not isinstance(layer, QgsVectorLayer):
             QMessageBox.information(None, self.tr('Geometry was not copied'),
                                     self.tr('Select any vector layer and feature!'))
             return
@@ -104,7 +104,7 @@ class GeometryCopier:
 
     def insert_geometry(self):
         layer = self.iface.activeLayer()
-        if not layer:
+        if not isinstance(layer, QgsVectorLayer):
             QMessageBox.information(None, self.tr('Geometry can\'t be inserted'),
                                     self.tr('Select any vector layer and feature for inserting geom!'))
             return
