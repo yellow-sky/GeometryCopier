@@ -11,7 +11,7 @@
 [general]
 name=Geometry copier
 qgisMinimumVersion=1.8
-description=Help to copy geometry in layers
+description=Plugin for copying geometry between features
 version=0.1
 author=Nikulin Evgeniy
 email=nikulin.e at gmail.com
@@ -24,14 +24,14 @@ email=nikulin.e at gmail.com
 # changelog=
 
 # tags are comma separated with spaces allowed
-tags=
+tags=vector, geometry, copy
 
-homepage=
-tracker=
-repository=
+homepage=https://github.com/yellow-sky/GeometryCopier/wiki
+tracker=https://github.com/yellow-sky/GeometryCopier/issues
+repository=https://github.com/yellow-sky/GeometryCopier
 icon=mActionEditPasteGeom.png
 # experimental flag
-experimental=False
+experimental=True
 
 # deprecated flag (applies to the whole plugin, not just a single version
 deprecated=False

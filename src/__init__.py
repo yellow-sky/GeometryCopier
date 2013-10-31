@@ -27,7 +27,7 @@ def name():
 
 
 def description():
-    return "Help to copy geometry in layers"
+    return "Plugin for copying geometry between features"
 
 
 def version():
