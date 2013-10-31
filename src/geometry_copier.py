@@ -74,18 +74,18 @@ class GeometryCopier:
         self.iface.registerMainWindowAction(self.insert_action, "F8")
 
         # Add toolbar button and menu item
-        self.iface.addToolBarIcon(self.copy_action)
-        self.iface.addToolBarIcon(self.insert_action)
-        self.iface.addPluginToMenu(u"&Geometry copier", self.copy_action)
-        self.iface.addPluginToMenu(u"&Geometry copier", self.insert_action)
+        self.iface.digitizeToolBar().addAction(self.copy_action)
+        self.iface.digitizeToolBar().addAction(self.insert_action)
+        self.iface.addPluginToVectorMenu(u"&Geometry copier", self.copy_action)
+        self.iface.addPluginToVectorMenu(u"&Geometry copier", self.insert_action)
 
     def unload(self):
         self.iface.unregisterMainWindowAction(self.copy_action)
         self.iface.unregisterMainWindowAction(self.insert_action)
-        self.iface.removePluginMenu(u"&Geometry copier", self.copy_action)
-        self.iface.removePluginMenu(u"&Geometry copier", self.insert_action)
-        self.iface.removeToolBarIcon(self.copy_action)
-        self.iface.removeToolBarIcon(self.insert_action)
+        self.iface.removePluginVectorMenu(u"&Geometry copier", self.copy_action)
+        self.iface.removePluginVectorMenu(u"&Geometry copier", self.insert_action)
+        self.iface.digitizeToolBar().removeAction(self.copy_action)
+        self.iface.digitizeToolBar().removeAction(self.insert_action)
 
     def copy_geometry(self):
         layer = self.iface.activeLayer()
