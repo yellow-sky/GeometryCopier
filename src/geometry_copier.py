@@ -20,9 +20,9 @@
  ***************************************************************************/
 """
 # Import the PyQt and QGIS libraries
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
-from qgis.core import *
+from PyQt4.QtCore import QFileInfo, QCoreApplication, QTranslator, qVersion, QSettings, QObject, SIGNAL
+from PyQt4.QtGui import QMessageBox, QIcon, QAction
+from qgis.core import QgsGeometry, QgsApplication
 # Initialize Qt resources from file resources.py
 import resources
 
@@ -35,15 +35,15 @@ class GeometryCopier:
         # initialize plugin directory
         self.plugin_dir = QFileInfo(QgsApplication.qgisUserDbFilePath()).path() + "/python/plugins/geometry_copier"
         # initialize locale
-        localePath = ""
+        locale_path = ""
         locale = QSettings().value("locale/userLocale").toString()[0:2]
 
         if QFileInfo(self.plugin_dir).exists():
-            localePath = self.plugin_dir + "/i18n/geometry_copier_" + locale + ".qm"
+            locale_path = self.plugin_dir + "/i18n/geometry_copier_" + locale + ".qm"
 
-        if QFileInfo(localePath).exists():
+        if QFileInfo(locale_path).exists():
             self.translator = QTranslator()
-            self.translator.load(localePath)
+            self.translator.load(locale_path)
 
             if qVersion() > '4.3.3':
                 QCoreApplication.installTranslator(self.translator)
@@ -53,11 +53,11 @@ class GeometryCopier:
         # Create action that will start plugin configuration
         self.copy_action = QAction(
             QIcon(':/plugins/geometrycopier/mActionEditCopyGeom.png'),
-            u"Copy", self.iface.mainWindow())
+            self.tr(u"Copy geometry"), self.iface.mainWindow())
 
         self.insert_action = QAction(
             QIcon(':/plugins/geometrycopier/mActionEditPasteGeom.png'),
-            u"Insert", self.iface.mainWindow())
+            self.tr(u"Insert geometry"), self.iface.mainWindow())
 
         # connect the action to the run method
         QObject.connect(self.copy_action, SIGNAL("triggered()"), self.copy_geometry)
@@ -84,11 +84,13 @@ class GeometryCopier:
     def copy_geometry(self):
         layer = self.iface.activeLayer()
         if not layer:
-            QMessageBox.information(None, 'Geometry was not copied', 'Select any layer and feature!')
+            QMessageBox.information(None, self.tr('Geometry was not copied'),
+                                    self.tr('Select any vector layer and feature!'))
             return
         features = layer.selectedFeatures()
-        if len(features) < 1:
-            QMessageBox.information(None, 'Geometry was not copied', 'Select any feature!')
+        if len(features) != 1:
+            QMessageBox.information(None, self.tr('Geometry was not copied'),
+                                    self.tr('Select one feature!'))
             return
         feature = features[0]
         self._geom_buffer = QgsGeometry(feature.geometry())
@@ -97,25 +99,27 @@ class GeometryCopier:
     def insert_geometry(self):
         layer = self.iface.activeLayer()
         if not layer:
-            QMessageBox.information(None, 'Geometry can\'t be inserted', 'Select any layer and feature for inserting!')
+            QMessageBox.information(None, self.tr('Geometry can\'t be inserted'),
+                                    self.tr('Select any vector layer and feature for inserting geom!'))
             return
         if not self._geom_buffer:
-            QMessageBox.information(None, 'Geometry can\'t be inserted', 'Buffer is empty!')
+            QMessageBox.information(None, self.tr('Geometry can\'t be inserted'), self.tr('Buffer is empty!'))
             return
         if not layer.isEditable():
-            QMessageBox.critical(None, 'Geometry can\'t be inserted', 'Layer is not editable!')
+            QMessageBox.critical(None, self.tr('Geometry can\'t be inserted'), self.tr('Layer is not editable!'))
             return
-        if layer.geometryType() != 2 and self._geom_buffer.type() != layer.geometryType():
-            QMessageBox.critical(None, 'Geometry can\'t be inserted',
-                                 'Layer has other geometry type!\n{0} {1}'.format(str(self._geom_buffer.type()),
-                                                                                  str(layer.geometryType())))
+        if self._geom_buffer.type() != layer.geometryType():  # and layer.geometryType() != 2:
+            QMessageBox.critical(None, self.tr('Geometry can\'t be inserted'),
+                                 self.tr('Target layer has other geometry type!'))
             return
         features = layer.selectedFeatures()
-        if len(features) < 1:
-            QMessageBox.critical(None, 'Geometry can\'t be inserted', 'Select feature for inserting geom!')
+        if len(features) != 1:
+            QMessageBox.critical(None, self.tr('Geometry can\'t be inserted'),
+                                 self.tr('Select one feature for inserting geom!'))
             return
         feature = features[0]
         layer.changeGeometry(feature.id(), QgsGeometry(self._geom_buffer))
         self.iface.mapCanvas().refresh()
 
-
+    def tr(self, text):
+        return QCoreApplication.translate("GeometryCopier", text)
