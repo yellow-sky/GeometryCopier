@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/plugins/geometrycopier" >
-        <file>icon.png</file>
+        <file>mActionEditCopyGeom.png</file>
+        <file>mActionEditPasteGeom.png</file>
     </qresource>
 </RCC>

@@ -35,7 +35,7 @@ def version():
 
 
 def icon():
-    return "icon.png"
+    return "mActionEditPasteGeom.png"
 
 
 def qgisMinimumVersion():

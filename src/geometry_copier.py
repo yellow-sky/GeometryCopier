@@ -24,7 +24,7 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from qgis.core import *
 # Initialize Qt resources from file resources.py
-#import resources_rc
+import resources
 
 
 class GeometryCopier:
@@ -52,11 +52,11 @@ class GeometryCopier:
     def initGui(self):
         # Create action that will start plugin configuration
         self.copy_action = QAction(
-            QIcon.fromTheme('edit-copy'),
+            QIcon(':/plugins/geometrycopier/mActionEditCopyGeom.png'),
             u"Copy", self.iface.mainWindow())
 
         self.insert_action = QAction(
-            QIcon.fromTheme('edit-insert'),
+            QIcon(':/plugins/geometrycopier/mActionEditPasteGeom.png'),
             u"Insert", self.iface.mainWindow())
 
         # connect the action to the run method
