@@ -22,34 +22,6 @@
 """
 
 
-def name():
-    return "Geometry copier"
-
-
-def description():
-    return "Plugin for copying geometry between features"
-
-
-def version():
-    return "Version 0.1"
-
-
-def icon():
-    return "mActionEditPasteGeom.png"
-
-
-def qgisMinimumVersion():
-    return "1.8"
-
-
-def author():
-    return "Nikulin Evgeniy"
-
-
-def email():
-    return "nikulin.e at gmail.com"
-
-
 def classFactory(iface):
     # load GeometryCopier class from file GeometryCopier
     from geometry_copier import GeometryCopier

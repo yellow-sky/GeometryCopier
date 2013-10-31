@@ -25,6 +25,7 @@ from PyQt4.QtGui import QMessageBox, QIcon, QAction
 from qgis.core import QgsGeometry, QgsApplication
 # Initialize Qt resources from file resources.py
 import resources
+import sip
 
 
 class GeometryCopier:
@@ -36,7 +37,12 @@ class GeometryCopier:
         self.plugin_dir = QFileInfo(QgsApplication.qgisUserDbFilePath()).path() + "/python/plugins/geometry_copier"
         # initialize locale
         locale_path = ""
-        locale = QSettings().value("locale/userLocale").toString()[0:2]
+        if sip.getapi("QVariant") > 1:
+            # new API style
+            locale = QSettings().value("locale/userLocale")[0:2]
+        else:
+            # the old API style
+            locale = QSettings().value("locale/userLocale").toString()[0:2]
 
         if QFileInfo(self.plugin_dir).exists():
             locale_path = self.plugin_dir + "/i18n/geometry_copier_" + locale + ".qm"
