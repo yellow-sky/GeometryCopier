@@ -79,6 +79,13 @@ class GeometryCopier:
         self.iface.addPluginToVectorMenu(u"&Geometry copier", self.copy_action)
         self.iface.addPluginToVectorMenu(u"&Geometry copier", self.insert_action)
 
+        # Add global signals
+        QObject.connect(self.iface, SIGNAL('currentLayerChanged(QgsMapLayer *)'), self.check_buttons_state)
+        QObject.connect(self.iface.mapCanvas(), SIGNAL('selectionChanged(QgsMapLayer *)'), self.check_buttons_state)
+
+        # init state
+        self.check_buttons_state(None)
+
     def unload(self):
         self.iface.unregisterMainWindowAction(self.copy_action)
         self.iface.unregisterMainWindowAction(self.insert_action)
@@ -86,6 +93,26 @@ class GeometryCopier:
         self.iface.removePluginVectorMenu(u"&Geometry copier", self.insert_action)
         self.iface.digitizeToolBar().removeAction(self.copy_action)
         self.iface.digitizeToolBar().removeAction(self.insert_action)
+        QObject.disconnect(self.iface, SIGNAL('currentLayerChanged(QgsMapLayer *)'), self.check_buttons_state)
+        QObject.disconnect(self.iface.mapCanvas(), SIGNAL('selectionChanged(QgsMapLayer *)'), self.check_buttons_state)
+
+    def check_buttons_state(self, layer):
+        layer = self.iface.activeLayer()
+        if not isinstance(layer, QgsVectorLayer):
+            self.copy_action.setDisabled(True)
+            self.insert_action.setDisabled(True)
+            return
+        features = layer.selectedFeatures()
+        if len(features) != 1:
+            self.copy_action.setDisabled(True)
+            self.insert_action.setDisabled(True)
+            return
+        self.copy_action.setEnabled(True)  # copy button can be pressed!
+        if not layer.isEditable():
+            self.insert_action.setDisabled(True)
+            return
+        self.insert_action.setEnabled(True)  # copy button can be pressed! (type geom??)
+
 
     def copy_geometry(self):
         layer = self.iface.activeLayer()
