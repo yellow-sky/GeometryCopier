@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/plugins/geometrycopier" >
+        <file>icon.png</file>
+    </qresource>
+</RCC>
