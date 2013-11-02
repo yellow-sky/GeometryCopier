@@ -82,6 +82,9 @@ class GeometryCopier:
         # Add global signals
         QObject.connect(self.iface, SIGNAL('currentLayerChanged(QgsMapLayer *)'), self.check_buttons_state)
         QObject.connect(self.iface.mapCanvas(), SIGNAL('selectionChanged(QgsMapLayer *)'), self.check_buttons_state)
+        QObject.connect(self.iface.actionToggleEditing(), SIGNAL('triggered()'), self.check_buttons_state)
+
+        #iface.actionToggleEditing().triggered
 
         # init state
         self.check_buttons_state(None)
@@ -95,8 +98,10 @@ class GeometryCopier:
         self.iface.digitizeToolBar().removeAction(self.insert_action)
         QObject.disconnect(self.iface, SIGNAL('currentLayerChanged(QgsMapLayer *)'), self.check_buttons_state)
         QObject.disconnect(self.iface.mapCanvas(), SIGNAL('selectionChanged(QgsMapLayer *)'), self.check_buttons_state)
+        QObject.disconnect(self.iface.actionToggleEditing(), SIGNAL('triggered()'), self.check_buttons_state)
 
-    def check_buttons_state(self, layer):
+
+    def check_buttons_state(self, layer=None):
         layer = self.iface.activeLayer()
         if not isinstance(layer, QgsVectorLayer):
             self.copy_action.setDisabled(True)
