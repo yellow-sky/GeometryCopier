@@ -100,7 +100,6 @@ class GeometryCopier:
         QObject.disconnect(self.iface.mapCanvas(), SIGNAL('selectionChanged(QgsMapLayer *)'), self.check_buttons_state)
         QObject.disconnect(self.iface.actionToggleEditing(), SIGNAL('triggered()'), self.check_buttons_state)
 
-
     def check_buttons_state(self, layer=None):
         layer = self.iface.activeLayer()
         if not isinstance(layer, QgsVectorLayer):
@@ -113,11 +112,10 @@ class GeometryCopier:
             self.insert_action.setDisabled(True)
             return
         self.copy_action.setEnabled(True)  # copy button can be pressed!
-        if not layer.isEditable():
+        if not layer.isEditable() or not self._geom_buffer or self._geom_buffer.type() != layer.geometryType():
             self.insert_action.setDisabled(True)
             return
-        self.insert_action.setEnabled(True)  # copy button can be pressed! (type geom??)
-
+        self.insert_action.setEnabled(True)  # insert button can be pressed! (type geom??)
 
     def copy_geometry(self):
         layer = self.iface.activeLayer()
@@ -132,7 +130,7 @@ class GeometryCopier:
             return
         feature = features[0]
         self._geom_buffer = QgsGeometry(feature.geometry())
-        #icon change
+        self.check_buttons_state()
 
     def insert_geometry(self):
         layer = self.iface.activeLayer()
