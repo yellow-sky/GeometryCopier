@@ -106,8 +106,8 @@ class GeometryCopier:
             self.copy_action.setDisabled(True)
             self.insert_action.setDisabled(True)
             return
-        features = layer.selectedFeatures()
-        if len(features) != 1:
+        sel_feat_count = layer.selectedFeatureCount()
+        if sel_feat_count != 1:
             self.copy_action.setDisabled(True)
             self.insert_action.setDisabled(True)
             return
@@ -123,12 +123,12 @@ class GeometryCopier:
             QMessageBox.information(None, self.tr('Geometry was not copied'),
                                     self.tr('Select any vector layer and feature!'))
             return
-        features = layer.selectedFeatures()
-        if len(features) != 1:
+        sel_feat_count = layer.selectedFeatureCount()
+        if sel_feat_count != 1:
             QMessageBox.information(None, self.tr('Geometry was not copied'),
                                     self.tr('Select one feature!'))
             return
-        feature = features[0]
+        feature = layer.selectedFeatures()[0]
         self._geom_buffer = QgsGeometry(feature.geometry())
         self.check_buttons_state()
 
@@ -148,12 +148,12 @@ class GeometryCopier:
             QMessageBox.critical(None, self.tr('Geometry can\'t be inserted'),
                                  self.tr('Target layer has other geometry type!'))
             return
-        features = layer.selectedFeatures()
-        if len(features) != 1:
+        sel_feat_count = layer.selectedFeatureCount()
+        if sel_feat_count != 1:
             QMessageBox.critical(None, self.tr('Geometry can\'t be inserted'),
                                  self.tr('Select one feature for inserting geom!'))
             return
-        feature = features[0]
+        feature = layer.selectedFeatures()[0]
         layer.changeGeometry(feature.id(), QgsGeometry(self._geom_buffer))
         self.iface.mapCanvas().refresh()
 
