@@ -13,7 +13,7 @@ name=Geometry copier
 qgisMinimumVersion=1.8
 qgisMaximumVersion=2.1
 description=Plugin for copying geometry between features
-version=0.3.0
+version=0.4.0
 author=Nikulin Evgeniy
 email=nikulin.e at gmail.com
 
@@ -22,10 +22,14 @@ email=nikulin.e at gmail.com
 # Optional items:
 
 # Uncomment the following line and add your changelog entries:
-changelog: 0.3.0   Plugin buttons moved to Vector menu and Digitaizing panel
-        Check layers type added
-        Auto enabling/disabling for buttons added
-    0.2.0   Migrate to QGIS 2.x API
+changelog: 0.4.0:
+        * Fix selection issue (qgis bug #9348)
+    0.3.0:
+        * Plugin buttons moved to Vector menu and Digitaizing panel
+        * Check layers type added
+        * Auto enabling/disabling for buttons added
+    0.2.0:
+        * Migrate to QGIS 2.x API
 
 # tags are comma separated with spaces allowed
 tags=vector, geometry, copy
