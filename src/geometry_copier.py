@@ -158,4 +158,4 @@ class GeometryCopier:
         self.iface.mapCanvas().refresh()
 
     def tr(self, text):
-        return QCoreApplication.translate("GeometryCopier", text)
+        return QCoreApplication.translate('GeometryCopier', text)
