@@ -1,0 +1,12 @@
+language: python
+python:
+  - 2.7
+before_install:
+  - sudo apt-get install python-qt4 python-sip python-qgis
+  - python -c 'import sip'
+  - python -c 'import PyQt4'
+  - python -c 'import PyQt4.QtCore'
+script:
+  # simple import test
+  - python ./src/__init__.py
+  - python ./src/geometry_copier.py
