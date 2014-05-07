@@ -4,6 +4,8 @@ python:
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -y python-qt4 python-sip python-qgis
+  - ls /home/travis/virtualenv/python2.7.6/lib/python2.7/site-packages
+  - python -c 'import PyQt4'
   - python -c 'import sip'
   - python -c 'import PyQt4'
   - python -c 'import PyQt4.QtCore'
